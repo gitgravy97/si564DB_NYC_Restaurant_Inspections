@@ -1,0 +1,82 @@
+# Code for diagram generation @ dbdiagram.io
+
+
+Table Violations {
+// IncidentID originally called CAMIS
+  IncidentID int [pk, increment]
+  Address_ID int
+  Business_ID int
+  Inspection_ID int
+  Violation_ID string
+  Borough string
+  Critical_Flag bool
+
+  // date whole incident was imported
+  Record_Date date
+}
+
+// Gives us business name and contact
+// WARNING :: What if phone number varies 
+// across "chapters" of a chain/franchise?
+Table Business {
+  Business_ID int [ref:> Violations.Business_ID]
+  OperatingName string
+  FoodType_ID int [ref:> FoodType.ID]
+}
+
+Table FoodType {
+  ID int [pk, increment]
+  Description varchar(100)
+}
+
+Table Address {
+  ID int [ref:> Violations.Address_ID]
+  Building string
+  Street string
+  ZipCode int
+  BranchOwnerPhone int
+}
+
+// What's the EXACT lat/long location?
+// I feel like this isn't commonly asked for
+Table Location_Advanced_WorkInProgress {
+  IncidentID int [ref:> Violations.IncidentID]
+  Latitude float
+  Longitude float
+  BIN int // building ID
+  BBL int // tax lot
+  // neighborhood tabulation areas
+  NTA string 
+  CommunityBoard int
+  CouncilDistrict int 
+  CensusTract int 
+}
+
+// Allows violation detail lookup via
+// existing regulatory rule encodings
+Table RuleBroken {
+  ID string [ref:> Violations.Violation_ID]
+  Violation_Description varchar(500+?)
+}
+
+Table Inspection {
+  Inspection_ID int [ref:>  Violations.Inspection_ID]
+  InspectionType_ID int [ref:> InspectionType.ID]
+  Inspection_Date date
+  Score int
+  Grade varchar(1)
+  // date Grade data was imported
+  Grade_Date date 
+  OutcomeID int [ref:> Outcome.ID]
+  // string // Inspection Outcome
+}
+
+Table InspectionType {
+  ID int [pk, increment]
+  Outcome varchar(100)
+}
+
+Table Outcome {
+  ID int [pk, increment]
+  Outcome varchar(150)
+}
