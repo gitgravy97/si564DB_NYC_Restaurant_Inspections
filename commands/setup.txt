@@ -1,0 +1,23 @@
+After importing the sample_25k file
+
+first make the leaf-most tables
+
+USE FinalProject_v2;
+
+#### Violations
+SELECT `VIOLATION CODE`, `VIOLATION DESCRIPTION` FROM sample_25k;
+INSERT INTO Violations (ShortCode, Description)
+    SELECT DISTINCT `VIOLATION CODE`, `VIOLATION DESCRIPTION`
+    FROM sample_25k;
+
+#### Outcomes
+SELECT DISTINCT ACTION FROM sample_25k;
+INSERT INTO Outcomes(Outcome) SELECT DISTINCT ACTION FROM sample_25k;
+
+#### InspectionTypes
+SELECT DISTINCT `INSPECTION TYPE` FROM sample_25k;
+INSERT INTO InspectionTypes(Type) SELECT DISTINCT `INSPECTION TYPE` FROM sample_25k;
+
+#### FoodTypes
+SELECT DISTINCT `CUISINE DESCRIPTION` FROM sample_25k;
+INSERT INTO FoodTypes(Type) SELECT DISTINCT `CUISINE DESCRIPTION` FROM sample_25k;
